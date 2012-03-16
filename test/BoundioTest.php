@@ -1,6 +1,6 @@
 <?php
 
-require_once '../Boundio.php';
+require_once dirname(__FILE__). '/../Boundio.php';
 
 /**
  * Test class for Boundio.
@@ -8,16 +8,17 @@ require_once '../Boundio.php';
  */
 class BoundioTest extends PHPUnit_Framework_TestCase
 {
-
 	/**
 	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp()
 	{
+		/*
 		Boundio::configure('userSerialId', '');
 		Boundio::configure('appId', '');
 		Boundio::configure('authKey', '');
+		*/
 	}
 
 	/**
@@ -25,10 +26,22 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCall()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		// Validation Error
+		// phone number
+		$this->assertEquals(false, Boundio::call('1234', array()));
+		$this->assertEquals(false, Boundio::call('test', array()));
+		
+		// casts
+		$this->assertEquals(false, Boundio::call('0123456789', array('file(000001)', 'silent()', 'num(0)', 'test')));
+		
+		// create mock to be fake api call function
+		$mock = $this->getMock('Boundio', array('_execute'));
+		$mock::staticExpects($this->any())
+			->method('_execute')
+			->will($this->returnValue('{"success":"true","_id":"1234"}'));
+		
+		// call success
+		$this->assertEquals(array('success' => "true", '_id' => '1234'), $mock::call('0123456789', array('file(000001)')));
 	}
 
 	/**
