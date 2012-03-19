@@ -21,9 +21,6 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 		*/
 	}
 
-	/**
-	 * @todo Implement testCall().
-	 */
 	public function testCall()
 	{
 		// Validation Error
@@ -44,15 +41,59 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array('success' => "true", '_id' => '1234'), $mock::call('0123456789', array('file(000001)')));
 	}
 
-	/**
-	 * @todo Implement testStatus().
-	 */
 	public function testStatus()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		
+		// create mock to be fake api call function
+		$mock = $this->getMock('Boundio', array('_execute'));
+		$mock::staticExpects($this->any())
+			->method('_execute')
+			->will($this->returnValue('{"success":"true","result":[{"_id":"2845","_from":"0123456789","_to":"0234567890","_start":"2012-03-16 12:19","_end":"2012-03-16 12:19","_duration":"27","_status":"架電完了"}]}'));
+		
+		// status success select all
+		$this->assertEquals(array(
+			'success' => "true",
+			"result" => array(array(
+				"_id" => "2845",
+				"_from" => "0123456789",
+				"_to" => "0234567890",
+				"_start" => "2012-03-16 12:19",
+				"_end" => "2012-03-16 12:19",
+				"_duration" => "27",
+				"_status" => "架電完了")
+			)), $mock::status());
+		
+		
+	}
+	
+	public function testStatusDate()
+	{
+		$mock = $this->getMock('Boundio', array('_execute'));
+		// create fake api call function
+		$mock::staticExpects($this->any())
+			->method('_execute')
+			->will($this->returnValue('{"success":"true","result":[{"_id":"2845","_from":"0123456789","_to":"0234567890","_start":"2012-03-16 12:19","_end":"2012-03-16 12:19","_duration":"27","_status":"架電完了"},{"_id":"2846","_from":"0123456789","_to":"0234567890","_start":"2012-03-16 12:20","_end":"2012-03-16 12:21","_duration":"27","_status":"架電完了"}]}'));
+		
+		// status success select date
+		$this->assertEquals(array(
+			'success' => "true",
+			"result" => array(array(
+				"_id" => "2845",
+				"_from" => "0123456789",
+				"_to" => "0234567890",
+				"_start" => "2012-03-16 12:19",
+				"_end" => "2012-03-16 12:19",
+				"_duration" => "27",
+				"_status" => "架電完了"
+			),array(
+				"_id" => "2846",
+				"_from" => "0123456789",
+				"_to" => "0234567890",
+				"_start" => "2012-03-16 12:20",
+				"_end" => "2012-03-16 12:21",
+				"_duration" => "27",
+				"_status" => "架電完了")
+		)), $mock::status('', '2012-03-16'));
 	}
 
 	/**
