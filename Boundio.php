@@ -59,8 +59,29 @@ class Boundio {
 		return $result;
 	}
 	
-	public static function status($id='') {
-		return false;
+	public static function status($id='', $start='', $end='', $count=100) {
+		$start = preg_replace('/[-\/]/', '', $start);
+		$end = preg_replace('/[-\/]/', '', $end);
+		
+		$params = array();
+		
+		if($id !== '') {
+			$params['tel_id'] = $id;
+		} elseif($start !== '') {
+			// search one day if end day is not given
+			if($end === '') {
+				$end = $start;
+			}
+			$params['start'] = $start;
+			$params['end'] = $end;
+		}
+		
+		// execute get status
+		$result = static::_execute(static::getUrl(). '/status', $params);
+		
+		$result = json_decode($result, true);
+		
+		return $result;
 	}
 	
 	public static function file($file='', $text='') {
