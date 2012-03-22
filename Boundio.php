@@ -84,11 +84,36 @@ class Boundio {
 		return $result;
 	}
 	
-	public static function file($text='', $file='') {
-		return false;
+	public static function file($text='', $file='', $filename) {
+		
+		$params = array();
+		$options = array();
+		
+		if($text !== '') {
+			$params['convtext'] = $text;
+			$params['filename'] = $filename;
+		} else {
+			// file validation
+			if(!file_exists($file)) {
+				return false;
+			}
+			$params['file'] = '@'. $file;
+			$params['filename'] = $filename;
+		}
+		
+		// execute get status
+		$result = static::_execute(static::getUrl(). '/file/post', $params);
+		
+		$result = json_decode($result, true);
+		
+		return $result;
 	}
 	
 	protected static function _execute($url, array $params, $method='get', array $options = array()) {
+		
+		$params['auth'] = static::$_config['authKey'];
+		$params['key'] = static::$_config['appId'];
+		
 		$defaults = ($method == 'post') ? array(
 			CURLOPT_POST => ($method == 'post') ? 1: 0,
 			CURLOPT_HEADER => 0,
@@ -99,7 +124,7 @@ class Boundio {
 			CURLOPT_TIMEOUT => 4,
 			CURLOPT_POSTFIELDS => http_build_query($params)
 		) : array(
-			CURLOPT_URL => $url. (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($get),
+			CURLOPT_URL => $url. (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($params),
 			CURLOPT_HEADER => 0,
 			CURLOPT_RETURNTRANSFER => TRUE,
 			CURLOPT_TIMEOUT => 4
