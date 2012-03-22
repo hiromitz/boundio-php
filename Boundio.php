@@ -84,7 +84,7 @@ class Boundio {
 		return $result;
 	}
 	
-	public static function file($file='', $text='') {
+	public static function file($text='', $file='') {
 		return false;
 	}
 	
