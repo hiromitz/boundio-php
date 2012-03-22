@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>boundio PHP library　Example</title>
+	<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+</head>
+<body>
+<div class="container">
+	<div class="hero-unit">
+		<h1>boundio PHP library</h1>
+		<p class="lead">boundio PHP library は、PHPでboundioを利用する際に役に立つクラスを提供します。</p>
+	</div>
+	<section id="call">
+		<h2>Call <small>架電API</small></h2>
+		<form class="form-horizontal">
+			<input type="hidden" name="action" value="call" id="action">
+			<div class="row">
+				<div class="span7">
+					<div class="control-group">
+						<label class="control-label" for="tel_to">Phone Number</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="tel_to" name="tel_to">
+						</div>
+					</div>
+					<div class="control-group" id="cast">
+						<label class="control-label" for="cast1">cast</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="cast1" name="cast" value="file(000001)">
+							<p class="help-block">split by ',' (comma)</p>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="submit" class="btn"><i class="icon-share-alt"></i> Call</button>
+						</div>
+					</div>
+				</div>
+				<div class="span5">
+					<div class="result"></div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<section id="status">
+		<h2>Status <small>架電履歴API</small></h2>
+		<form class="form-horizontal">
+			<input type="hidden" name="action" value="status" id="action">
+			<div class="row">
+				<div class="span7">
+					<div class="control-group">
+						<label class="control-label" for="_id">ID</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="_id" name="_id">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="start">Start</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="start" name="start" value="">
+						</div>
+					</div>
+					<div class="control-group" id="end">
+						<label class="control-label" for="end">End</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="end" name="end" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="submit" class="btn"><i class="icon-th-list"></i> Status</button>
+						</div>
+					</div>
+				</div>
+				<div class="span5">
+					<div class="result"></div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<section id="convert">
+		<h2>Convert <small>音声ファイル操作API（テキスト音声合成）</small></h2>
+		<form class="form-horizontal">
+			<input type="hidden" name="action" value="convert" id="action">
+			<div class="row">
+				<div class="span7">
+					<div class="control-group">
+						<label class="control-label" for="tel_to">ConvertText</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="text" name="text">
+						</div>
+					</div>
+					<div class="control-group" id="cn-filename">
+						<label class="control-label" for="cn-filename">Filename</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="cn-filename" name="filename" value="convert.aiff">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="submit" class="btn"><i class="icon-random"></i> Convert</button>
+						</div>
+					</div>
+				</div>
+				<div class="span5">
+					<div class="result"></div>
+				</div>
+			</div>
+		</form>
+	</section>
+	<section id="upload">
+		<h2>Upload <small>音声ファイル操作API（ファイルアップロード）</small></h2>
+		<form class="form-horizontal">
+			<input type="hidden" name="action" value="upload" id="action">
+			<div class="row">
+				<div class="span7">
+					<div class="control-group">
+						<label class="control-label" for="file">Uploadfile</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="file" name="file" value="test.aiff">
+							<p class="help-block">サーバー上のファイルパス</p>
+						</div>
+					</div>
+					<div class="control-group" id="cast">
+						<label class="control-label" for="up-filename">Filename</label>
+						<div class="controls">
+							<input type="text" class="input-xlarge" id="up-filename" name="filename" value="test.aiff">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="submit" class="btn"><i class="icon-upload"></i> Upload</button>
+						</div>
+					</div>
+				</div>
+				<div class="span5">
+					<div class="result"></div>
+				</div>
+			</div>
+		</form>
+	</section>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+	$(function() {
+		$('form').submit(function(e) {
+			e.preventDefault();
+			var fm = this;
+			$.ajax({
+				type: 'post',
+				url: 'example.php',
+				data: $(fm).serialize(),
+				success: function(data) {
+					var $res = $('<pre/>').text(data).hide();
+					$(fm).find('.result').append($res.show());
+				}
+			});
+			
+		});
+	});
+</script>
+</body>
+</html>
