@@ -109,6 +109,10 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 	
 	public function testFileUpload()
 	{
+		// Validatin Error
+		// file not exists
+		$this->assertEquals(false, Boundio::file('', 'convert.aiff', 'convert.aiff'));
+		
 		$mock = $this->getMock('Boundio', array('_execute'));
 		// create fake api call function
 		$mock::staticExpects($this->any())
