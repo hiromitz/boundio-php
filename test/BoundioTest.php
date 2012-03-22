@@ -96,26 +96,26 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 		)), $mock::status('', '2012-03-16'));
 	}
 
-	/**
-	 * @todo Implement testFile().
-	 */
 	public function testFileTextConvert()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$mock = $this->getMock('Boundio', array('_execute'));
+		// create fake api call function
+		$mock::staticExpects($this->any())
+			->method('_execute')
+			->will($this->returnValue('{"success":"true","fileid":"000001","filename":"convert.aiff"}'));
+		
+		$this->assertEquals(array('success' => "true", 'fileid' => '000001', 'filename' => 'convert.aiff'), $mock::file('こんにちわ', '', 'convert.aiff'));
 	}
 	
-	/**
-	 * @todo Implement testFile().
-	 */
 	public function testFileUpload()
 	{
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-		  'This test has not been implemented yet.'
-		);
+		$mock = $this->getMock('Boundio', array('_execute'));
+		// create fake api call function
+		$mock::staticExpects($this->any())
+			->method('_execute')
+			->will($this->returnValue('{"success":"true","fileid":"000002","filename":"test.aiff"}'));
+		
+		$this->assertEquals(array('success' => "true", 'fileid' => '000002', 'filename' => 'test.aiff'), $mock::file('', 'test.aiff', 'test.aiff'));
 	}
 }
 ?>
