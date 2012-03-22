@@ -26,8 +26,8 @@ class Boundio {
 		static::$_config[$key] = $value;
 	}
 	
-	protected static function getUrl() {
-		$url = (static::$_config['env'] == 'develop') ? static::$_baseDevUrl : static::$_baseUrl;
+	protected static function getUrl($develop=false) {
+		$url = (static::$_config['env'] == 'develop' && $develop === false) ? static::$_baseDevUrl : static::$_baseUrl;
 		$url .= static::$_config['userSerialId'];
 		return $url;
 	}
@@ -77,7 +77,7 @@ class Boundio {
 		}
 		
 		// execute get status
-		$result = static::_execute(static::getUrl(). '/status', $params);
+		$result = static::_execute(static::getUrl(). '/tel_status', $params);
 		
 		$result = json_decode($result, true);
 		
@@ -102,7 +102,7 @@ class Boundio {
 		}
 		
 		// execute get status
-		$result = static::_execute(static::getUrl(). '/file/post', $params);
+		$result = static::_execute(static::getUrl(true). '/file/post', $params, 'post');
 		
 		$result = json_decode($result, true);
 		
@@ -122,7 +122,7 @@ class Boundio {
 			CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_FORBID_REUSE => 1,
 			CURLOPT_TIMEOUT => 4,
-			CURLOPT_POSTFIELDS => http_build_query($params)
+			CURLOPT_POSTFIELDS => $params
 		) : array(
 			CURLOPT_URL => $url. (strpos($url, '?') === FALSE ? '?' : ''). http_build_query($params),
 			CURLOPT_HEADER => 0,
