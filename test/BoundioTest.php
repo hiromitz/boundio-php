@@ -99,7 +99,18 @@ class BoundioTest extends PHPUnit_Framework_TestCase
 	/**
 	 * @todo Implement testFile().
 	 */
-	public function testFile()
+	public function testFileTextConvert()
+	{
+		// Remove the following lines when you implement this test.
+		$this->markTestIncomplete(
+		  'This test has not been implemented yet.'
+		);
+	}
+	
+	/**
+	 * @todo Implement testFile().
+	 */
+	public function testFileUpload()
 	{
 		// Remove the following lines when you implement this test.
 		$this->markTestIncomplete(
